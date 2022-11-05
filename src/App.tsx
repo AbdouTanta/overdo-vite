@@ -1,34 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import List from "./components/List";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import boards from "./data/boards";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+    return (
+        <div className="h-screen bg-zinc-200">
+            {/* Nav: Logo and User */}
+            <Navbar />
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+            <div className="grid grid-cols-[20em_auto] mt-24">
+                {/* Sidebar: Boards */}
+                <Sidebar />
+                {/* Todo, Doing and Done tasks */}
+                <div className="flex items-start gap-8">
+                    {boards[0].lists.map((list) => (
+                        <List key={list.id} list={list} />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
-export default App
+export default App;
