@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
-import List from "./components/List";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { useQuery } from "@tanstack/react-query";

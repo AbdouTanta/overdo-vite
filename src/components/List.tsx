@@ -3,8 +3,8 @@ import Task from "./Task";
 
 const List = ({ list }: { list: IList }) => {
     return (
-        <div className="shadow-sm flex flex-col gap-4 p-4 bg-white rounded-2xl w-72">
-            <div className="font-semibold text-md">{list.name}</div>
+        <div className="flex w-72 flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md">
+            <div className="text-md font-semibold">{list.name}</div>
             {list.tasks?.map((task: any, index) => (
                 <Task key={task.id} task={task} index={index} />
             ))}
