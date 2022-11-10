@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { useQuery } from "@tanstack/react-query";
 import ListGrid from "./components/Board";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IBoard } from "./types/IBoard";
 import ColorContext from "./contexts/BoardContext";
 
@@ -34,9 +34,9 @@ const App = () => {
                 <Navbar />
 
                 <div className="mt-24 grid grid-cols-[20em_auto]">
-                    {/* Sidebar: Boards */}
+                    {/* Sidebar */}
                     <Sidebar boards={boards} activeBoardId={selectedBoard.id} />
-                    {/* Todo, Doing and Done boards */}
+                    {/* Board lists */}
                     {isLoading ? (
                         <h1>Loading</h1>
                     ) : (
