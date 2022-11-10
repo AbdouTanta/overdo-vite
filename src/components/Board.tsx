@@ -2,7 +2,7 @@ import { IBoard } from "../types/IBoard";
 import { IList } from "../types/IList";
 import List from "./List";
 
-const Board = ({ board }: { board: IBoard }) => {
+const ListGrid = ({ board }: { board: IBoard }) => {
     return (
         <div className="flex items-start gap-8">
             {board?.lists.map((list: IList) => (
@@ -12,4 +12,4 @@ const Board = ({ board }: { board: IBoard }) => {
     );
 };
 
-export default Board;
+export default ListGrid;
