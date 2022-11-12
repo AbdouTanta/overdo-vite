@@ -18,7 +18,8 @@ function Sidebar({ boards }: SidebarProps) {
             'cursor-pointer rounded-lg bg-opacity-30 p-2 text-lg font-medium',
             `text-${board.color}-500`,
             `hover:text-${board.color}-400`,
-            board.id === selectedBoard.id && `bg-${board.color}-300`
+            board.id === selectedBoard.id &&
+              `outline outline-2 outline-${board.color}-500`
           )}
           onClick={() => {
             setSelectedBoard({ id: board.id, color: board.color });
