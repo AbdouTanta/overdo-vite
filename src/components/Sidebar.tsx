@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from 'clsx';
-import { useContext } from 'react';
-import BoardContext from '../contexts/BoardContext';
+import { useBoard } from '../contexts/board-context';
 import { IBoard } from '../types/IBoard';
 
 type SidebarProps = { boards: IBoard[] };
 
 function Sidebar({ boards }: SidebarProps) {
-  const { selectedBoard, setSelectedBoard } = useContext(BoardContext);
+  const { selectedBoard, setSelectedBoard } = useBoard();
 
   return (
     <div className="flex flex-col gap-12 px-20">

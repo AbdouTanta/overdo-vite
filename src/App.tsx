@@ -1,51 +1,47 @@
+import { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ListGrid from './components/Board';
 import { IBoard } from './types/IBoard';
-import ColorContext from './contexts/BoardContext';
+import { BoardProvider } from './contexts/board-context';
 
 function App() {
-  const [selectedBoard, setSelectedBoard] = useState({
-    id: '1',
-    color: 'green',
-  });
+  const [selectedBoard, setSelectedBoard] = useState({ id: '', color: '' });
 
   const { data: boards, isLoading } = useQuery({
     queryKey: ['boards'],
     queryFn: () =>
       axios.get('http://localhost:3000/boards').then((res) => {
-        setSelectedBoard({
-          id: res.data[0].id,
-          color: res.data[0].color,
+        setSelectedBoard(() => {
+          return {
+            id: res.data[0].id,
+            color: res.data[0].color,
+          };
         });
         return res.data;
       }),
     initialData: [],
   });
 
+  if (isLoading) return <div>Loading</div>;
+
   return (
-    <ColorContext.Provider value={{ selectedBoard, setSelectedBoard }}>
+    <BoardProvider value={{ selectedBoard, setSelectedBoard }}>
       <div className="h-screen bg-stone-200">
         {/* Nav: Logo and User */}
         <Navbar />
-
         <div className="mt-24 grid grid-cols-[20em_auto]">
           {/* Sidebar */}
           <Sidebar boards={boards} />
           {/* Board lists */}
-          {isLoading ? (
-            <h1>Loading</h1>
-          ) : (
-            <ListGrid
-              board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
-            />
-          )}
+          <ListGrid
+            board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
+          />
         </div>
       </div>
-    </ColorContext.Provider>
+    </BoardProvider>
   );
 }
 
