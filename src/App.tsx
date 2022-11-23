@@ -5,10 +5,11 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ListGrid from './components/Board';
 import { IBoard } from './types/IBoard';
-import { BoardProvider } from './contexts/board-context';
+import { BoardProvider, useBoard } from './contexts/board-context';
+import { ModalProvider } from './contexts/modal-context';
 
 function App() {
-  const [selectedBoard, setSelectedBoard] = useState({ id: '', color: '' });
+  const { selectedBoard, setSelectedBoard } = useBoard();
 
   const { data: boards, isLoading } = useQuery({
     queryKey: ['boards'],
@@ -28,20 +29,18 @@ function App() {
   if (isLoading) return <div>Loading</div>;
 
   return (
-    <BoardProvider value={{ selectedBoard, setSelectedBoard }}>
-      <div className="h-screen bg-stone-200">
-        {/* Nav: Logo and User */}
-        <Navbar />
-        <div className="mt-24 grid grid-cols-[20em_auto]">
-          {/* Sidebar */}
-          <Sidebar boards={boards} />
-          {/* Board lists */}
-          <ListGrid
-            board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
-          />
-        </div>
+    <div className="h-screen bg-slate-200">
+      {/* Nav: Logo and User */}
+      <Navbar />
+      <div className="mt-12 grid grid-cols-[20em_auto]">
+        {/* Sidebar */}
+        <Sidebar boards={boards} />
+        {/* Board lists */}
+        <ListGrid
+          board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
+        />
       </div>
-    </BoardProvider>
+    </div>
   );
 }
 

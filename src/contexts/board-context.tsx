@@ -4,6 +4,7 @@ import {
   Dispatch,
   SetStateAction,
   ReactNode,
+  useState,
 } from 'react';
 
 type ContextProps = {
@@ -14,26 +15,24 @@ type ContextProps = {
   setSelectedBoard: Dispatch<SetStateAction<{ id: string; color: string }>>;
 };
 
-const BoardContext = createContext<ContextProps | undefined>(undefined);
+const BoardContext = createContext<ContextProps | null>(null);
 
 function useBoard() {
   const context = useContext(BoardContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useBoard must be used within a BoardProvider');
   }
   return context;
 }
 
-function BoardProvider({
-  children,
-  value,
-}: {
-  children: ReactNode;
-  value: ContextProps;
-}) {
+function BoardProvider({ children }: { children: ReactNode }) {
+  const [selectedBoard, setSelectedBoard] = useState({ id: '', color: '' });
+
   /* eslint-disable react/jsx-no-constructed-context-values */
   return (
-    <BoardContext.Provider value={value}>{children}</BoardContext.Provider>
+    <BoardContext.Provider value={{ selectedBoard, setSelectedBoard }}>
+      {children}
+    </BoardContext.Provider>
   );
 }
 
