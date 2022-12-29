@@ -7,7 +7,7 @@ const queryClient = new QueryClient();
 function DataProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <BoardProvider value={null}>
+      <BoardProvider>
         <ModalProvider>{children}</ModalProvider>
       </BoardProvider>
     </QueryClientProvider>

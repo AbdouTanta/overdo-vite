@@ -1,6 +1,7 @@
 import { IList } from '../types/IList';
 import { ITask } from '../types/ITask';
 import Task from './Task';
+import TaskPlaceholder from './TaskPlaceholder';
 
 function List({ list }: { list: IList }) {
   return (
@@ -9,6 +10,7 @@ function List({ list }: { list: IList }) {
       {list.tasks?.map((task: ITask) => (
         <Task key={task.id} task={task} />
       ))}
+      <TaskPlaceholder listId={list.id} />
     </div>
   );
 }

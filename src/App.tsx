@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ListGrid from './components/Board';
 import { IBoard } from './types/IBoard';
-import { BoardProvider, useBoard } from './contexts/board-context';
-import { ModalProvider } from './contexts/modal-context';
+import { useBoard } from './contexts/board-context';
 
 function App() {
   const { selectedBoard, setSelectedBoard } = useBoard();
@@ -14,7 +12,8 @@ function App() {
   const { data: boards, isLoading } = useQuery({
     queryKey: ['boards'],
     queryFn: () =>
-      axios.get('http://localhost:3000/boards').then((res) => {
+      axios.get('http://localhost:3000/api/boards').then((res) => {
+        if (res.data.length === 0) return [];
         setSelectedBoard(() => {
           return {
             id: res.data[0].id,

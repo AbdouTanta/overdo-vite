@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import TextInput from '../inputs/TextInput';
-import Button from '../buttons/Button';
-import CheckBox from '../inputs/CheckBox';
 import { useModal } from '../../contexts/modal-context';
+import CheckBox from '../inputs/CheckBox';
+import Button from '../buttons/Button';
 
 type Inputs = {
   name: string;
@@ -15,12 +17,25 @@ type Inputs = {
 function Modal() {
   const { setShowModal } = useModal();
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    (newBoard) => {
+      return axios.post('http://localhost:3000/api/boards', newBoard);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['boards']);
+      },
+    }
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    mutation.mutate({ name: data.name, color: data.color });
     setShowModal(false);
   };
 
