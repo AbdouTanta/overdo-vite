@@ -7,6 +7,7 @@ import { useModal } from '../../contexts/modal-context';
 import Button from '../buttons/Button';
 import ModalTypes from '../../types/ModalTypes';
 import { useBoard } from '../../contexts/board-context';
+import { IList } from '../../types/IList';
 
 type Inputs = {
   name: string;
@@ -16,15 +17,35 @@ type Inputs = {
 function CreateTaskModal() {
   const queryClient = useQueryClient();
   const { modal, setModal } = useModal();
-  const { selectedBoard } = useBoard();
+  const { selectedBoard, selectedListId } = useBoard();
 
   const mutation = useMutation(
     (data: Inputs) => {
       return axios.post(`http://localhost:3000/api/tasks/${modal.id}`, data);
     },
     {
+      onMutate: async (newTask) => {
+        await queryClient.cancelQueries([selectedBoard.id]);
+        const snapshotOfPreviousLists = queryClient.getQueryData([
+          selectedBoard.id,
+        ]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData([selectedBoard.id], (oldLists: any) =>
+          oldLists.map((list: IList) => {
+            if (list.id === selectedListId) {
+              const updatedTasks = [...list.tasks, newTask];
+              return { ...list, tasks: updatedTasks };
+            }
+            return list;
+          })
+        );
+        return { snapshotOfPreviousLists };
+      },
       onSuccess: () => {
         queryClient.invalidateQueries([selectedBoard.id]);
+      },
+      onError: (error, newBoard, snapshotOfPreviousLists) => {
+        queryClient.setQueryData([selectedBoard.id], snapshotOfPreviousLists);
       },
     }
   );

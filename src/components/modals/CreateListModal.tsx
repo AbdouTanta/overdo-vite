@@ -27,8 +27,23 @@ function CreateListModal() {
       );
     },
     {
+      onMutate: async (newList) => {
+        await queryClient.cancelQueries([selectedBoard.id]);
+        const snapshotOfPreviousLists = queryClient.getQueryData([
+          selectedBoard.id,
+        ]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData([selectedBoard.id], (oldLists: any) => [
+          ...oldLists,
+          newList,
+        ]);
+        return { snapshotOfPreviousLists };
+      },
       onSuccess: () => {
         queryClient.invalidateQueries([selectedBoard.id]);
+      },
+      onError: (error, newBoard, snapshotOfPreviousLists) => {
+        queryClient.setQueryData([selectedBoard.id], snapshotOfPreviousLists);
       },
     }
   );

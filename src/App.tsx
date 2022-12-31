@@ -14,14 +14,13 @@ function App() {
     queryFn: () =>
       axios.get('http://localhost:3000/api/boards').then((res) => {
         if (res.data.length === 0) return [];
-        if (selectedBoard.id === '') {
-          setSelectedBoard(() => {
-            return {
-              id: res.data[0].id,
-              color: res.data[0].color,
-            };
-          });
-        }
+        setSelectedBoard(() => {
+          return {
+            id: res.data[0].id,
+            color: res.data[0].color,
+          };
+        });
+
         return res.data;
       }),
   });

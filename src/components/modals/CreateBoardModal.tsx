@@ -24,8 +24,21 @@ function CreateBoardModal() {
       return axios.post('http://localhost:3000/api/boards', newBoard);
     },
     {
+      onMutate: async (newBoard) => {
+        await queryClient.cancelQueries(['boards']);
+        const snapshotOfPreviousBoards = queryClient.getQueryData(['boards']);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(['boards'], (oldBoards: any) => [
+          ...oldBoards,
+          newBoard,
+        ]);
+        return { snapshotOfPreviousBoards };
+      },
       onSuccess: () => {
         queryClient.invalidateQueries(['boards']);
+      },
+      onError: (error, newBoard, snapshotOfPreviousBoards) => {
+        queryClient.setQueryData(['boards'], snapshotOfPreviousBoards);
       },
     }
   );

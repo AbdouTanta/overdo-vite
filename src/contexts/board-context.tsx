@@ -13,6 +13,8 @@ type ContextProps = {
     color: string;
   };
   setSelectedBoard: Dispatch<SetStateAction<{ id: string; color: string }>>;
+  selectedListId: string;
+  setSelectedListId: Dispatch<SetStateAction<string>>;
 };
 
 const BoardContext = createContext<ContextProps | null>(null);
@@ -27,10 +29,17 @@ function useBoard() {
 
 function BoardProvider({ children }: { children: ReactNode }) {
   const [selectedBoard, setSelectedBoard] = useState({ id: '', color: '' });
-
+  const [selectedListId, setSelectedListId] = useState('');
   /* eslint-disable react/jsx-no-constructed-context-values */
   return (
-    <BoardContext.Provider value={{ selectedBoard, setSelectedBoard }}>
+    <BoardContext.Provider
+      value={{
+        selectedBoard,
+        setSelectedBoard,
+        selectedListId,
+        setSelectedListId,
+      }}
+    >
       {children}
     </BoardContext.Provider>
   );
