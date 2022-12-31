@@ -46,7 +46,7 @@ function ListGrid({ board }: { board: IBoard }) {
         ? lists?.map((list: IList) => <List key={list.id} list={list} />)
         : null}
       <div className="flex flex-col gap-4">
-        <ListPlaceholder boardId={board.id} />
+        <ListPlaceholder />
         <div
           className="text-md cursor-pointer font-medium text-red-500 underline underline-offset-4 hover:text-red-700"
           onClick={() => {

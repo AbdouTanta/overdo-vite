@@ -1,11 +1,15 @@
 import { createContext, useContext, ReactNode, useState } from 'react';
 import ModalTypes from '../types/ModalTypes';
 
+interface IModalState {
+  open: boolean;
+  type: ModalTypes;
+  id?: string;
+}
+
 type ContextProps = {
-  modal: { open: boolean; type: ModalTypes };
-  setModal: React.Dispatch<
-    React.SetStateAction<{ open: boolean; type: ModalTypes }>
-  >;
+  modal: IModalState;
+  setModal: React.Dispatch<React.SetStateAction<IModalState>>;
 };
 
 const ModalContext = createContext<ContextProps | null>(null);
