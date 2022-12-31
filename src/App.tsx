@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import ListGrid from './components/Board';
+import Navbar from './components/global/Navbar';
+import Sidebar from './components/global/Sidebar';
+import ListGrid from './components/list/ListGrid';
 import { IBoard } from './types/IBoard';
 import { useBoard } from './contexts/board-context';
 
@@ -14,31 +14,38 @@ function App() {
     queryFn: () =>
       axios.get('http://localhost:3000/api/boards').then((res) => {
         if (res.data.length === 0) return [];
-        setSelectedBoard(() => {
-          return {
-            id: res.data[0].id,
-            color: res.data[0].color,
-          };
-        });
+        if (selectedBoard.id === '') {
+          setSelectedBoard(() => {
+            return {
+              id: res.data[0].id,
+              color: res.data[0].color,
+            };
+          });
+        }
         return res.data;
       }),
-    initialData: [],
   });
-
-  if (isLoading) return <div>Loading</div>;
 
   return (
     <div className="h-screen bg-slate-200">
       {/* Nav: Logo and User */}
       <Navbar />
-      <div className="mt-12 grid grid-cols-[20em_auto]">
-        {/* Sidebar */}
-        <Sidebar boards={boards} />
-        {/* Board lists */}
-        <ListGrid
-          board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
-        />
-      </div>
+      {isLoading ? (
+        <div className="text-center">Loading...</div>
+      ) : (
+        <div className="mt-12 grid grid-cols-[20em_auto]">
+          {/* Sidebar */}
+          <Sidebar boards={boards} />
+          {/* Board lists */}
+          {boards.length === 0 ? (
+            <div>No boards!</div>
+          ) : (
+            <ListGrid
+              board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

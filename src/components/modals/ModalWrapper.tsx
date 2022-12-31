@@ -1,14 +1,32 @@
+import React, { Suspense } from 'react';
 import { useModal } from '../../contexts/modal-context';
-import Modal from './Modal';
+import ModalTypes from '../../types/ModalTypes';
+
+const CreateBoardModal = React.lazy(() => import('./CreateBoardModal'));
+const CreateListModal = React.lazy(() => import('./CreateListModal'));
+const CreateTaskModal = React.lazy(() => import('./CreateTaskModal'));
 
 function ModalWrapper() {
-  const { showModal } = useModal();
+  const { modal } = useModal();
 
-  if (showModal) {
+  const modals = {
+    [ModalTypes.CREATE_BOARD]: CreateBoardModal,
+    [ModalTypes.CREATE_LIST]: CreateListModal,
+    [ModalTypes.CREATE_TASK]: CreateTaskModal,
+    [ModalTypes.NULL]: null,
+  };
+
+  const ModalComponent = modals[modal.type];
+
+  if (modal.open) {
     return (
       <div>
         <div className="fixed left-0 top-0 h-screen w-screen bg-black opacity-40" />
-        <Modal />
+        {ModalComponent ? (
+          <Suspense>
+            <ModalComponent />
+          </Suspense>
+        ) : null}
       </div>
     );
   }

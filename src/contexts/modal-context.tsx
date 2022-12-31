@@ -1,8 +1,11 @@
 import { createContext, useContext, ReactNode, useState } from 'react';
+import ModalTypes from '../types/ModalTypes';
 
 type ContextProps = {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  modal: { open: boolean; type: ModalTypes };
+  setModal: React.Dispatch<
+    React.SetStateAction<{ open: boolean; type: ModalTypes }>
+  >;
 };
 
 const ModalContext = createContext<ContextProps | null>(null);
@@ -16,10 +19,13 @@ function useModal() {
 }
 
 function ModalProvider({ children }: { children: ReactNode }) {
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState({
+    open: false,
+    type: ModalTypes.NULL,
+  });
   /* eslint-disable react/jsx-no-constructed-context-values */
   return (
-    <ModalContext.Provider value={{ showModal, setShowModal }}>
+    <ModalContext.Provider value={{ modal, setModal }}>
       {children}
     </ModalContext.Provider>
   );

@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from 'clsx';
-import { useBoard } from '../contexts/board-context';
-import { useModal } from '../contexts/modal-context';
-import { IBoard } from '../types/IBoard';
+import { useBoard } from '../../contexts/board-context';
+import { useModal } from '../../contexts/modal-context';
+import { IBoard } from '../../types/IBoard';
+import ModalTypes from '../../types/ModalTypes';
 
 type SidebarProps = { boards: IBoard[] };
 
 function Sidebar({ boards }: SidebarProps) {
   const { selectedBoard, setSelectedBoard } = useBoard();
-  const { setShowModal } = useModal();
+  const { setModal } = useModal();
 
   return (
     <div className="flex flex-col gap-12 px-20">
@@ -32,7 +33,7 @@ function Sidebar({ boards }: SidebarProps) {
       <div
         className="cursor-pointer text-lg font-medium text-slate-500 underline underline-offset-4 hover:text-slate-700"
         onClick={() => {
-          setShowModal(true);
+          setModal({ open: true, type: ModalTypes.CREATE_BOARD });
         }}
       >
         + New Board

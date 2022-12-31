@@ -6,6 +6,7 @@ import TextInput from '../inputs/TextInput';
 import { useModal } from '../../contexts/modal-context';
 import CheckBox from '../inputs/CheckBox';
 import Button from '../buttons/Button';
+import ModalTypes from '../../types/ModalTypes';
 
 type Inputs = {
   name: string;
@@ -14,12 +15,12 @@ type Inputs = {
 };
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-function Modal() {
-  const { setShowModal } = useModal();
+function CreateBoardModal() {
+  const { setModal } = useModal();
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    (newBoard) => {
+    (newBoard: { name: string; color: string }) => {
       return axios.post('http://localhost:3000/api/boards', newBoard);
     },
     {
@@ -36,7 +37,7 @@ function Modal() {
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     mutation.mutate({ name: data.name, color: data.color });
-    setShowModal(false);
+    setModal({ open: false, type: ModalTypes.NULL });
   };
 
   return (
@@ -86,7 +87,7 @@ function Modal() {
             text="Cancel"
             isPrimary={false}
             onClick={() => {
-              setShowModal(false);
+              setModal({ open: false, type: ModalTypes.NULL });
             }}
           />
           <Button text="Create" isPrimary onClick={handleSubmit(onSubmit)} />
@@ -96,4 +97,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default CreateBoardModal;

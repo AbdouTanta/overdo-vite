@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { useBoard } from '../contexts/board-context';
-import { ITask } from '../types/ITask';
+import { useBoard } from '../../contexts/board-context';
+import { ITask } from '../../types/ITask';
 
 function Task({ task }: { task: ITask }) {
   const { selectedBoard } = useBoard();
