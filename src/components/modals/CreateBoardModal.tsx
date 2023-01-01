@@ -2,6 +2,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import TextInput from '../inputs/TextInput';
 import { useModal } from '../../contexts/modal-context';
 import CheckBox from '../inputs/CheckBox';
@@ -30,7 +31,7 @@ function CreateBoardModal() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         queryClient.setQueryData(['boards'], (oldBoards: any) => [
           ...oldBoards,
-          newBoard,
+          { id: uuidv4(), ...newBoard },
         ]);
         return { snapshotOfPreviousBoards };
       },

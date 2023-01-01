@@ -10,14 +10,17 @@ import ListPlaceholder from './ListPlaceholder';
 function ListGrid({ board }: { board: IBoard }) {
   const queryClient = useQueryClient();
 
+  const boardId = board?.id;
+
   const { data: lists, isLoading } = useQuery({
-    queryKey: [board.id],
+    queryKey: [boardId],
     queryFn: () =>
       axios.get(`http://localhost:3000/api/board/${board.id}`).then((res) => {
         if (res.data.length === 0) return [];
         return res.data.lists;
       }),
     initialData: [],
+    enabled: !!boardId,
   });
 
   const mutation = useMutation(
