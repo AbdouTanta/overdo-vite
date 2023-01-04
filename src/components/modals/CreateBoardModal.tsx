@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -15,7 +14,6 @@ type Inputs = {
   startWithTemplate: boolean;
 };
 
-/* eslint-disable jsx-a11y/label-has-associated-control */
 function CreateBoardModal() {
   const { setModal } = useModal();
 

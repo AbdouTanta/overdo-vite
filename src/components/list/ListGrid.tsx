@@ -58,14 +58,6 @@ function ListGrid({ board }: { board: IBoard }) {
         >
           X Delete Board
         </div>
-        <div
-          className="text-md cursor-pointer font-medium text-red-500 underline underline-offset-4 hover:text-red-700"
-          onClick={() => {
-            mutation.mutate();
-          }}
-        >
-          X Delete All lists
-        </div>
       </div>
     </motion.div>
   );
