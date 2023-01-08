@@ -2,17 +2,33 @@ import React, { Suspense } from 'react';
 import { useModal } from '../../contexts/modal-context';
 import ModalTypes from '../../types/ModalTypes';
 
-const CreateBoardModal = React.lazy(() => import('./CreateBoardModal'));
-const CreateListModal = React.lazy(() => import('./CreateListModal'));
-const CreateTaskModal = React.lazy(() => import('./CreateTaskModal'));
+const CreateBoardModal = React.lazy(() => import('./board/CreateBoardModal'));
+const EditBoardModal = React.lazy(() => import('./board/EditBoardModal'));
+const DeleteBoardModal = React.lazy(() => import('./board/DeleteBoardModal'));
+
+const CreateListModal = React.lazy(() => import('./list/CreateListModal'));
+const EditListModal = React.lazy(() => import('./list/EditListModal'));
+const DeleteListModal = React.lazy(() => import('./list/DeleteListModal'));
+
+const CreateTaskModal = React.lazy(() => import('./task/CreateTaskModal'));
+const EditTaskModal = React.lazy(() => import('./task/EditTaskModal'));
+const DeleteTaskModal = React.lazy(() => import('./task/DeleteTaskModal'));
 
 function ModalWrapper() {
   const { modal } = useModal();
 
   const modals = {
     [ModalTypes.CREATE_BOARD]: CreateBoardModal,
+    [ModalTypes.EDIT_BOARD]: EditBoardModal,
+    [ModalTypes.DELETE_BOARD]: DeleteBoardModal,
+
     [ModalTypes.CREATE_LIST]: CreateListModal,
+    [ModalTypes.EDIT_LIST]: EditListModal,
+    [ModalTypes.DELETE_LIST]: DeleteListModal,
+
     [ModalTypes.CREATE_TASK]: CreateTaskModal,
+    [ModalTypes.EDIT_TASK]: EditTaskModal,
+    [ModalTypes.DELETE_TASK]: DeleteTaskModal,
     [ModalTypes.NULL]: null,
   };
 

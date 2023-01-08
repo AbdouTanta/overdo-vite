@@ -2,26 +2,29 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import TextInput from '../inputs/TextInput';
-import { useModal } from '../../contexts/modal-context';
-import Button from '../buttons/Button';
-import ModalTypes from '../../types/ModalTypes';
-import { useBoard } from '../../contexts/board-context';
-import { IList } from '../../types/IList';
+import TextInput from '../../inputs/TextInput';
+import { useModal } from '../../../contexts/modal-context';
+import Button from '../../buttons/Button';
+import ModalTypes from '../../../types/ModalTypes';
+import { useBoard } from '../../../contexts/board-context';
+import { IList } from '../../../types/IList';
 
 type Inputs = {
   name: string;
 };
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-function CreateTaskModal() {
+function DeleteTaskModal() {
   const queryClient = useQueryClient();
-  const { modal, setModal } = useModal();
+  const { setModal } = useModal();
   const { selectedBoard, selectedListId } = useBoard();
 
   const mutation = useMutation(
     (data: Inputs) => {
-      return axios.post(`http://localhost:3000/api/tasks/${modal.id}`, data);
+      return axios.post(
+        `http://localhost:3000/lists/${selectedListId}/tasks`,
+        data
+      );
     },
     {
       onMutate: async (newTask) => {
@@ -95,4 +98,4 @@ function CreateTaskModal() {
   );
 }
 
-export default CreateTaskModal;
+export default DeleteTaskModal;

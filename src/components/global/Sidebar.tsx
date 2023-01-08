@@ -4,7 +4,7 @@ import { useBoard } from '../../contexts/board-context';
 import { useModal } from '../../contexts/modal-context';
 import { IBoard } from '../../types/IBoard';
 import ModalTypes from '../../types/ModalTypes';
-import BoardMenu from '../buttons/BoardMenu';
+import BoardMenu from '../buttons/OptionsDropdown';
 
 type SidebarProps = { boards: IBoard[] };
 
@@ -18,7 +18,7 @@ function Sidebar({ boards }: SidebarProps) {
         <div
           key={board.id}
           className={clsx(
-            'flex cursor-pointer justify-between rounded-lg bg-opacity-30 p-2 text-lg font-medium hover:outline hover:outline-2',
+            'flex cursor-pointer items-center justify-between rounded-lg bg-opacity-30 p-2 text-lg font-medium hover:outline hover:outline-2',
             board.id === selectedBoard.id
               ? `outline outline-2 outline-${board.color}-500`
               : `outline-slate-400`
@@ -35,7 +35,16 @@ function Sidebar({ boards }: SidebarProps) {
           >
             {board.name}
           </div>
-          {board.id === selectedBoard.id ? <BoardMenu /> : null}
+          {board.id === selectedBoard.id ? (
+            <BoardMenu
+              editHandler={() => {
+                setModal({ open: true, type: ModalTypes.EDIT_BOARD });
+              }}
+              deleteHandler={() => {
+                setModal({ open: true, type: ModalTypes.DELETE_BOARD });
+              }}
+            />
+          ) : null}
         </div>
       ))}
       <div

@@ -15,7 +15,7 @@ function ListGrid({ board }: { board: IBoard }) {
   const { data: lists, isLoading } = useQuery({
     queryKey: [boardId],
     queryFn: () =>
-      axios.get(`http://localhost:3000/api/board/${board.id}`).then((res) => {
+      axios.get(`http://localhost:3000/boards/${board.id}`).then((res) => {
         if (res.data.length === 0) return [];
         return res.data.lists;
       }),
@@ -25,7 +25,7 @@ function ListGrid({ board }: { board: IBoard }) {
 
   const mutation = useMutation(
     () => {
-      return axios.delete(`http://localhost:3000/api/boards/${board.id}`);
+      return axios.delete(`http://localhost:3000/boards/${board.id}`);
     },
     {
       onSuccess: () => {

@@ -2,11 +2,11 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import TextInput from '../inputs/TextInput';
-import { useModal } from '../../contexts/modal-context';
-import CheckBox from '../inputs/CheckBox';
-import Button from '../buttons/Button';
-import ModalTypes from '../../types/ModalTypes';
+import TextInput from '../../inputs/TextInput';
+import { useModal } from '../../../contexts/modal-context';
+import CheckBox from '../../inputs/CheckBox';
+import Button from '../../buttons/Button';
+import ModalTypes from '../../../types/ModalTypes';
 
 type Inputs = {
   name: string;
@@ -14,13 +14,13 @@ type Inputs = {
   startWithTemplate: boolean;
 };
 
-function CreateBoardModal() {
+function DeleteBoardModal() {
   const { setModal } = useModal();
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (newBoard: { name: string; color: string }) => {
-      return axios.post('http://localhost:3000/api/boards', newBoard);
+      return axios.post('http://localhost:3000/boards', newBoard);
     },
     {
       onMutate: async (newBoard) => {
@@ -109,4 +109,4 @@ function CreateBoardModal() {
   );
 }
 
-export default CreateBoardModal;
+export default DeleteBoardModal;

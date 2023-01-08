@@ -1,5 +1,6 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import client from './api/common/client';
 import Navbar from './components/global/Navbar';
 import Sidebar from './components/global/Sidebar';
 import ListGrid from './components/list/ListGrid';
@@ -12,7 +13,7 @@ function App() {
   const { data: boards, isLoading } = useQuery({
     queryKey: ['boards'],
     queryFn: () =>
-      axios.get('http://localhost:3000/api/boards').then((res) => {
+      client.get('/boards').then((res) => {
         if (res.data.length === 0) return [];
         setSelectedBoard(() => {
           return {

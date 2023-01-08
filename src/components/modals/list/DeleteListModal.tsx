@@ -1,42 +1,47 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import TextInput from '../inputs/TextInput';
-import { useModal } from '../../contexts/modal-context';
-import Button from '../buttons/Button';
-import ModalTypes from '../../types/ModalTypes';
-import { useBoard } from '../../contexts/board-context';
+import axios from 'axios';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import TextInput from '../../inputs/TextInput';
+import { useModal } from '../../../contexts/modal-context';
+import Button from '../../buttons/Button';
+import ModalTypes from '../../../types/ModalTypes';
+import { useBoard } from '../../../contexts/board-context';
+import { IList } from '../../../types/IList';
 
 type Inputs = {
   name: string;
 };
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-function CreateListModal() {
-  const { setModal } = useModal();
-  const { selectedBoard } = useBoard();
-
+function DeleteListModal() {
   const queryClient = useQueryClient();
+  const { setModal } = useModal();
+  const { selectedBoard, selectedListId } = useBoard();
 
   const mutation = useMutation(
     (data: Inputs) => {
       return axios.post(
-        `http://localhost:3000/api/boards/${selectedBoard.id}/lists`,
+        `http://localhost:3000/lists/${selectedListId}/tasks`,
         data
       );
     },
     {
-      onMutate: async (newList) => {
+      onMutate: async (newTask) => {
         await queryClient.cancelQueries([selectedBoard.id]);
         const snapshotOfPreviousLists = queryClient.getQueryData([
           selectedBoard.id,
         ]);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData([selectedBoard.id], (oldLists: any) => [
-          ...oldLists,
-          newList,
-        ]);
+        queryClient.setQueryData([selectedBoard.id], (oldLists: any) =>
+          oldLists.map((list: IList) => {
+            if (list.id === selectedListId) {
+              const updatedTasks = [...list.tasks, newTask];
+              return { ...list, tasks: updatedTasks };
+            }
+            return list;
+          })
+        );
         return { snapshotOfPreviousLists };
       },
       onSuccess: () => {
@@ -62,7 +67,7 @@ function CreateListModal() {
     <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center">
       <div className="flex h-72 flex-col gap-4 rounded-xl bg-white p-6">
         {/* Modal title */}
-        <div className="text-lg font-semibold">Create a new list</div>
+        <div className="text-lg font-semibold">Create a new Task</div>
         {/* Inputs */}
         <div className="flex flex-col gap-1">
           <TextInput
@@ -93,4 +98,4 @@ function CreateListModal() {
   );
 }
 
-export default CreateListModal;
+export default DeleteListModal;
