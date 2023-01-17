@@ -27,14 +27,7 @@ function Sidebar({ boards }: SidebarProps) {
             setSelectedBoard({ id: board.id, color: board.color });
           }}
         >
-          <div
-            className={clsx(
-              `text-${board.color}-500`,
-              `hover:text-${board.color}-400`
-            )}
-          >
-            {board.name}
-          </div>
+          <div className={clsx(`text-${board.color}-500`)}>{board.name}</div>
           {board.id === selectedBoard.id ? (
             <BoardMenu
               editHandler={() => {

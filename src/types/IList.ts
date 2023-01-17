@@ -1,7 +1,7 @@
-import { ITask } from "./ITask";
+import { ITask } from './ITask';
 
 export interface IList {
-    id: string;
-    name: string;
-    tasks: ITask[];
+  id: string;
+  name: string;
+  tasks: ITask[];
 }

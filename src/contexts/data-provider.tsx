@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardProvider } from './board-context';
 import { ModalProvider } from './modal-context';
@@ -17,6 +18,7 @@ function DataProvider({ children }: { children: ReactNode }) {
       <BoardProvider>
         <ModalProvider>{children}</ModalProvider>
       </BoardProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

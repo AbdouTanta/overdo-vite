@@ -1,4 +1,10 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  useForm,
+  SubmitHandler,
+  Controller,
+  ControllerRenderProps,
+  FieldValues,
+} from 'react-hook-form';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +13,7 @@ import { useModal } from '../../../contexts/modal-context';
 import CheckBox from '../../inputs/CheckBox';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
+import ColorDropdown from '../../inputs/ColorDropdown';
 
 type Inputs = {
   name: string;
@@ -16,6 +23,7 @@ type Inputs = {
 
 function CreateBoardModal() {
   const { setModal } = useModal();
+  const colors = ['red', 'green', 'blue', 'orange', 'teal', 'yellow', 'black'];
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
@@ -43,6 +51,7 @@ function CreateBoardModal() {
   );
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -73,11 +82,25 @@ function CreateBoardModal() {
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <TextInput
+            {/* <TextInput
               label="Color"
               id="color"
               register={register}
               validationSchema={{ required: true }}
+            /> */}
+            <Controller
+              control={control}
+              defaultValue="green"
+              rules={{ required: true }}
+              name="color"
+              render={({ field }) => (
+                <ColorDropdown
+                  label="Color"
+                  id="color"
+                  field={field}
+                  colors={colors}
+                />
+              )}
             />
             {errors.color && (
               <div className="text-xs font-medium text-red-500">

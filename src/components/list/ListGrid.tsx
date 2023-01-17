@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useGetBoard } from '../../api/board/useGetBoard';
 import { IBoard } from '../../types/IBoard';
 import { IList } from '../../types/IList';
 import List from './List';
@@ -10,22 +11,13 @@ import ListPlaceholder from './ListPlaceholder';
 function ListGrid({ board }: { board: IBoard }) {
   const queryClient = useQueryClient();
 
-  const boardId = board?.id;
+  const boardId = board.id;
 
-  const { data: lists, isLoading } = useQuery({
-    queryKey: [boardId],
-    queryFn: () =>
-      axios.get(`http://localhost:3000/boards/${board.id}`).then((res) => {
-        if (res.data.length === 0) return [];
-        return res.data.lists;
-      }),
-    initialData: [],
-    enabled: !!boardId,
-  });
+  const { data: lists, isLoading } = useGetBoard({ boardId });
 
   const mutation = useMutation(
     () => {
-      return axios.delete(`http://localhost:3000/boards/${board.id}`);
+      return axios.delete(`http://localhost:3000/boards/${boardId}`);
     },
     {
       onSuccess: () => {
@@ -40,7 +32,7 @@ function ListGrid({ board }: { board: IBoard }) {
 
   return (
     <motion.div
-      className="flex items-start gap-8 overflow-x-auto pb-4 pr-4"
+      className="scrollbar mr-20 flex items-start gap-8 overflow-x-auto pb-4 pr-4"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ease: 'easeOut', duration: 0.5 }}
