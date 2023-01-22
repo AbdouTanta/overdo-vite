@@ -1,4 +1,8 @@
-export interface ITask {
-    id: string;
-    name: string;
-}
+export type ITask = {
+  id: string;
+  name: string;
+};
+
+export type CreateTaskDTO = Omit<ITask, 'id'>;
+
+export type EditTaskDTO = Partial<CreateTaskDTO>;
