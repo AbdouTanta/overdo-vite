@@ -14,7 +14,7 @@ type Inputs = {
   startWithTemplate: boolean;
 };
 
-function EditeBoardModal() {
+function EditBoardModal() {
   const { setModal } = useModal();
 
   const queryClient = useQueryClient();
@@ -109,4 +109,4 @@ function EditeBoardModal() {
   );
 }
 
-export default EditeBoardModal;
+export default EditBoardModal;
