@@ -2,7 +2,6 @@
 import Navbar from './components/global/Navbar';
 import Sidebar from './components/global/Sidebar';
 import ListGrid from './components/list/ListGrid';
-import { IBoard } from './types/IBoard';
 import { useBoard } from './contexts/board-context';
 import { useGetBoards } from './api/board/useGetBoards';
 
@@ -39,9 +38,7 @@ function App() {
             {boards.length === 0 ? (
               <div>No boards!</div>
             ) : (
-              <ListGrid
-                board={boards.find((b: IBoard) => b.id === selectedBoard.id)}
-              />
+              <ListGrid boardId={selectedBoard.id} />
             )}
           </div>
         )}

@@ -3,16 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useGetBoard } from '../../api/board/useGetBoard';
-import { IBoard } from '../../types/IBoard';
 import { IList } from '../../types/IList';
 import List from './List';
 import ListPlaceholder from './ListPlaceholder';
 
-function ListGrid({ board }: { board: IBoard }) {
+function ListGrid({ boardId }: { boardId: string }) {
   const queryClient = useQueryClient();
-
-  const boardId = board.id;
-
   const { data: lists, isLoading } = useGetBoard({ boardId });
 
   const mutation = useMutation(
