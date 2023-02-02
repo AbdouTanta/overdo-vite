@@ -3,17 +3,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useGetBoard } from '../../api/board/useGetBoard';
+import { IBoard } from '../../types/IBoard';
 import { IList } from '../../types/IList';
 import List from './List';
 import ListPlaceholder from './ListPlaceholder';
 
-function ListGrid({ boardId }: { boardId: string }) {
+function ListGrid({ board }: { board: IBoard }) {
   const queryClient = useQueryClient();
-  const { data: lists, isLoading } = useGetBoard({ boardId });
+  const { data: lists, isLoading } = useGetBoard({ boardId: board.id });
 
   const mutation = useMutation(
     () => {
-      return axios.delete(`http://localhost:3000/boards/${boardId}`);
+      return axios.delete(`http://localhost:3000/boards/${board.id}`);
     },
     {
       onSuccess: () => {

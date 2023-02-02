@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import Navbar from './components/global/Navbar';
 import Sidebar from './components/global/Sidebar';
 import ListGrid from './components/list/ListGrid';
@@ -13,10 +12,7 @@ function App() {
       if (res.length === 0) return [];
       if (selectedBoard.id === '') {
         setSelectedBoard(() => {
-          return {
-            id: res[0].id,
-            color: res[0].color,
-          };
+          return res[0];
         });
       }
       return res;
@@ -38,7 +34,7 @@ function App() {
             {boards.length === 0 ? (
               <div>No boards!</div>
             ) : (
-              <ListGrid boardId={selectedBoard.id} />
+              <ListGrid board={selectedBoard} />
             )}
           </div>
         )}

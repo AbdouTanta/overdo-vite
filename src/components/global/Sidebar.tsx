@@ -24,14 +24,18 @@ function Sidebar({ boards }: SidebarProps) {
               : `outline-slate-400`
           )}
           onClick={() => {
-            setSelectedBoard({ id: board.id, color: board.color });
+            setSelectedBoard(board);
           }}
         >
           <div className={clsx(`text-${board.color}-500`)}>{board.name}</div>
           {board.id === selectedBoard.id ? (
             <BoardMenu
               editHandler={() => {
-                setModal({ open: true, type: ModalTypes.EDIT_BOARD });
+                setModal({
+                  open: true,
+                  type: ModalTypes.EDIT_BOARD,
+                  data: board,
+                });
               }}
               deleteHandler={() => {
                 setModal({ open: true, type: ModalTypes.DELETE_BOARD });

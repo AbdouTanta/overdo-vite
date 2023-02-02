@@ -4,7 +4,11 @@ import ModalTypes from '../types/ModalTypes';
 interface IModalState {
   open: boolean;
   type: ModalTypes;
-  id?: string;
+  data?: {
+    id?: string;
+    name?: string;
+    color?: string;
+  };
 }
 
 type ContextProps = {

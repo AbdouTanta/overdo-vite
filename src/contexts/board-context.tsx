@@ -6,13 +6,11 @@ import {
   ReactNode,
   useState,
 } from 'react';
+import { IBoard } from '../types/IBoard';
 
 type ContextProps = {
-  selectedBoard: {
-    id: string;
-    color: string;
-  };
-  setSelectedBoard: Dispatch<SetStateAction<{ id: string; color: string }>>;
+  selectedBoard: IBoard;
+  setSelectedBoard: Dispatch<SetStateAction<IBoard>>;
   selectedListId: string;
   setSelectedListId: Dispatch<SetStateAction<string>>;
 };
@@ -28,7 +26,11 @@ function useBoard() {
 }
 
 function BoardProvider({ children }: { children: ReactNode }) {
-  const [selectedBoard, setSelectedBoard] = useState({ id: '', color: '' });
+  const [selectedBoard, setSelectedBoard] = useState({
+    id: '',
+    name: '',
+    color: '',
+  });
   const [selectedListId, setSelectedListId] = useState('');
   /* eslint-disable react/jsx-no-constructed-context-values */
   return (

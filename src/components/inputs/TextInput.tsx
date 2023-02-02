@@ -1,11 +1,14 @@
+/* eslint-disable react/require-default-props */
 function TextInput({
   label,
   id,
+  defaultValue,
   register,
   validationSchema,
 }: {
   label: string;
   id: string;
+  defaultValue?: string;
   register: any;
   validationSchema: any;
 }) {
@@ -16,6 +19,7 @@ function TextInput({
       </label>
       <input
         type="text"
+        defaultValue={defaultValue}
         id={id}
         className="rounded-lg bg-gray-200 p-2 text-gray-500 focus:outline-none"
         {...register(id, validationSchema)}
