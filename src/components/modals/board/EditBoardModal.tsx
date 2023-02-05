@@ -1,10 +1,10 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { v4 as uuidv4 } from 'uuid';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import TextInput from '../../inputs/TextInput';
 import { useModal } from '../../../contexts/modal-context';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
+import { usePatchBoard } from '../../../api/board/usePatchBoard';
 
 type Inputs = {
   name: string;
@@ -13,8 +13,14 @@ type Inputs = {
 
 function EditBoardModal() {
   const { modal, setModal } = useModal();
-
   const queryClient = useQueryClient();
+  const { mutate: editBoard } = usePatchBoard({
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ['boards', modal.data?.id] });
+      // queryClient.invalidateQueries({ queryKey: ['boards'] });
+      queryClient.invalidateQueries();
+    },
+  });
 
   const {
     register,
@@ -23,6 +29,12 @@ function EditBoardModal() {
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     // mutation.mutate({ name: data.name, color: data.color });
+    if (modal?.data?.id) {
+      editBoard({
+        boardId: modal.data?.id,
+        payload: { name: data.name, color: data.color },
+      });
+    }
     setModal({ open: false, type: ModalTypes.NULL });
   };
 
@@ -37,7 +49,7 @@ function EditBoardModal() {
             <TextInput
               label="Name"
               id="name"
-              defaultValue={modal?.data?.name}
+              defaultValue={modal.data?.name}
               register={register}
               validationSchema={{ required: true }}
             />
@@ -51,7 +63,7 @@ function EditBoardModal() {
             <TextInput
               label="Color"
               id="color"
-              defaultValue={modal?.data?.color}
+              defaultValue={modal.data?.color}
               register={register}
               validationSchema={{ required: true }}
             />
