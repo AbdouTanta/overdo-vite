@@ -5,6 +5,7 @@ import { useModal } from '../../../contexts/modal-context';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
 import { usePatchBoard } from '../../../api/board/usePatchBoard';
+import { useBoard } from '../../../contexts/board-context';
 
 type Inputs = {
   name: string;
@@ -13,11 +14,13 @@ type Inputs = {
 
 function EditBoardModal() {
   const { modal, setModal } = useModal();
+  const { setSelectedBoard } = useBoard();
   const queryClient = useQueryClient();
   const { mutate: editBoard } = usePatchBoard({
-    onSuccess: () => {
+    onSuccess: (newBoard) => {
       // queryClient.invalidateQueries({ queryKey: ['boards', modal.data?.id] });
       // queryClient.invalidateQueries({ queryKey: ['boards'] });
+      setSelectedBoard(newBoard);
       queryClient.invalidateQueries();
     },
   });
