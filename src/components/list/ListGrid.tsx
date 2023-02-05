@@ -39,14 +39,6 @@ function ListGrid({ board }: { board: IBoard }) {
         : null}
       <div className="flex flex-col gap-4">
         <ListPlaceholder />
-        <div
-          className="text-md cursor-pointer font-medium text-red-500 underline underline-offset-4 hover:text-red-700"
-          onClick={() => {
-            mutation.mutate();
-          }}
-        >
-          X Delete Board
-        </div>
       </div>
     </motion.div>
   );
