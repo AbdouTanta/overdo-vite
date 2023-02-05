@@ -4,11 +4,13 @@ import clsx from 'clsx';
 
 function Button({
   text,
-  isPrimary,
+  isPrimary = false,
+  isDelete = false,
   onClick,
 }: {
   text: string;
-  isPrimary: boolean;
+  isPrimary?: boolean;
+  isDelete?: boolean;
   onClick?: () => void;
 }) {
   return (
@@ -18,6 +20,8 @@ function Button({
         'bg-green-100 text-green-600 outline outline-2 outline-green-400/50':
           isPrimary,
         'text-gray-600 outline outline-2 outline-gray-400/50': !isPrimary,
+        'bg-red-100 text-red-600 outline outline-2 outline-red-400/50':
+          isDelete,
       })}
       onClick={onClick}
     >
