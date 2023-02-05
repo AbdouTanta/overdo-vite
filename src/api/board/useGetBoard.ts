@@ -19,7 +19,7 @@ export function useGetBoard({ config, boardId }: UseGetBoardOptions) {
   return useQuery<Response>({
     queryKey: ['boards', boardId],
     queryFn: () => getBoard(boardId),
-    // enabled: !!boardId,
+    enabled: !!boardId,
     ...config,
   });
 }

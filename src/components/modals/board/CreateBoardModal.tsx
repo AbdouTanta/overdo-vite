@@ -14,6 +14,7 @@ import CheckBox from '../../inputs/CheckBox';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
 import ColorDropdown from '../../inputs/ColorDropdown';
+import { usePostBoard } from '../../../api/board/usePostBoard';
 
 type Inputs = {
   name: string;
@@ -22,33 +23,14 @@ type Inputs = {
 };
 
 function CreateBoardModal() {
-  const { setModal } = useModal();
-  const colors = ['red', 'green', 'blue', 'orange', 'teal', 'yellow', 'black'];
-
   const queryClient = useQueryClient();
-  const mutation = useMutation(
-    (newBoard: { name: string; color: string }) => {
-      return axios.post('http://localhost:3000/boards', newBoard);
+  const { setModal } = useModal();
+  const { mutate: postBoard } = usePostBoard({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['boards']);
     },
-    {
-      onMutate: async (newBoard) => {
-        await queryClient.cancelQueries(['boards']);
-        const snapshotOfPreviousBoards = queryClient.getQueryData(['boards']);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData(['boards'], (oldBoards: any) => [
-          ...oldBoards,
-          { id: uuidv4(), ...newBoard },
-        ]);
-        return { snapshotOfPreviousBoards };
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries(['boards']);
-      },
-      onError: (error, newBoard, snapshotOfPreviousBoards) => {
-        queryClient.setQueryData(['boards'], snapshotOfPreviousBoards);
-      },
-    }
-  );
+  });
+  const colors = ['red', 'green', 'blue', 'orange', 'teal', 'yellow', 'black'];
 
   const {
     control,
@@ -57,7 +39,7 @@ function CreateBoardModal() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    mutation.mutate({ name: data.name, color: data.color });
+    postBoard({ payload: { name: data.name, color: data.color } });
     setModal({ open: false, type: ModalTypes.NULL });
   };
 
