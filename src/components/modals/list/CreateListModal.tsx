@@ -7,6 +7,7 @@ import { useModal } from '../../../contexts/modal-context';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
 import { useBoard } from '../../../contexts/board-context';
+import { usePostList } from '../../../api/list/usePostList';
 
 type Inputs = {
   name: string;
@@ -16,37 +17,13 @@ type Inputs = {
 function CreateListModal() {
   const { setModal } = useModal();
   const { selectedBoard } = useBoard();
-
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    (data: Inputs) => {
-      return axios.post(
-        `http://localhost:3000/boards/${selectedBoard.id}/lists`,
-        data
-      );
+  const { mutate: addList } = usePostList({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['boards']);
     },
-    {
-      onMutate: async (newList) => {
-        await queryClient.cancelQueries([selectedBoard.id]);
-        const snapshotOfPreviousLists = queryClient.getQueryData([
-          selectedBoard.id,
-        ]);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData([selectedBoard.id], (oldLists: any) => [
-          ...oldLists,
-          newList,
-        ]);
-        return { snapshotOfPreviousLists };
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries([selectedBoard.id]);
-      },
-      onError: (error, newBoard, snapshotOfPreviousLists) => {
-        queryClient.setQueryData([selectedBoard.id], snapshotOfPreviousLists);
-      },
-    }
-  );
+  });
 
   const {
     register,
@@ -54,7 +31,7 @@ function CreateListModal() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    mutation.mutate(data);
+    addList({ boardId: selectedBoard.id, payload: { name: data.name } });
     setModal({ open: false, type: ModalTypes.NULL });
   };
 

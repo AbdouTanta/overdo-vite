@@ -34,7 +34,7 @@ function App() {
             {boards.length === 0 ? (
               <div>No boards!</div>
             ) : (
-              <ListGrid board={selectedBoard} />
+              selectedBoard.id !== '' && <ListGrid board={selectedBoard} />
             )}
           </div>
         )}

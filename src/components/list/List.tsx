@@ -15,10 +15,18 @@ function List({ list }: { list: IList }) {
         <div className="text-md font-semibold">{list.name}</div>
         <BoardMenu
           editHandler={() => {
-            setModal({ open: true, type: ModalTypes.EDIT_LIST });
+            setModal({
+              open: true,
+              type: ModalTypes.EDIT_LIST,
+              data: { id: list.id },
+            });
           }}
           deleteHandler={() => {
-            setModal({ open: true, type: ModalTypes.DELETE_LIST });
+            setModal({
+              open: true,
+              type: ModalTypes.DELETE_LIST,
+              data: { id: list.id },
+            });
           }}
         />
       </div>

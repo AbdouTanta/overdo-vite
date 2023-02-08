@@ -9,7 +9,6 @@ function ListPlaceholder() {
     <div
       className="flex h-14 w-72 cursor-pointer flex-col justify-center gap-4 rounded-xl border-2 border-slate-700 bg-slate-200 p-4 align-middle opacity-50 shadow-sm transition hover:bg-slate-300"
       onClick={() => {
-        // mutation.mutate();
         setModal({ open: true, type: ModalTypes.CREATE_LIST });
       }}
     >

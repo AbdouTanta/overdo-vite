@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import TextInput from '../../inputs/TextInput';
 import { useModal } from '../../../contexts/modal-context';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
-import { useBoard } from '../../../contexts/board-context';
-import { IList } from '../../../types/IList';
+import { usePatchTask } from '../../../api/task/usePatchTask';
 
 type Inputs = {
   name: string;
@@ -15,43 +13,15 @@ type Inputs = {
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 function EditTaskModal() {
-  const queryClient = useQueryClient();
-  const { setModal } = useModal();
-  const { selectedBoard, selectedListId } = useBoard();
+  const { modal, setModal } = useModal();
 
-  const mutation = useMutation(
-    (data: Inputs) => {
-      return axios.post(
-        `http://localhost:3000/lists/${selectedListId}/tasks`,
-        data
-      );
+  const queryClient = useQueryClient();
+
+  const { mutate: editTask } = usePatchTask({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['boards']);
     },
-    {
-      onMutate: async (newTask) => {
-        await queryClient.cancelQueries([selectedBoard.id]);
-        const snapshotOfPreviousLists = queryClient.getQueryData([
-          selectedBoard.id,
-        ]);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData([selectedBoard.id], (oldLists: any) =>
-          oldLists.map((list: IList) => {
-            if (list.id === selectedListId) {
-              const updatedTasks = [...list.tasks, newTask];
-              return { ...list, tasks: updatedTasks };
-            }
-            return list;
-          })
-        );
-        return { snapshotOfPreviousLists };
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries([selectedBoard.id]);
-      },
-      onError: (error, newBoard, snapshotOfPreviousLists) => {
-        queryClient.setQueryData([selectedBoard.id], snapshotOfPreviousLists);
-      },
-    }
-  );
+  });
 
   const {
     register,
@@ -59,7 +29,9 @@ function EditTaskModal() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    mutation.mutate(data);
+    if (modal.data?.id) {
+      editTask({ taskId: modal.data.id, payload: { name: data.name } });
+    }
     setModal({ open: false, type: ModalTypes.NULL });
   };
 

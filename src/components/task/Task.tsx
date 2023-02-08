@@ -20,10 +20,18 @@ function Task({ task }: { task: ITask }) {
       <div className="font-normal text-black">{task.name}</div>
       <BoardMenu
         editHandler={() => {
-          setModal({ open: true, type: ModalTypes.EDIT_TASK });
+          setModal({
+            open: true,
+            type: ModalTypes.EDIT_TASK,
+            data: { id: task.id },
+          });
         }}
         deleteHandler={() => {
-          setModal({ open: true, type: ModalTypes.DELETE_TASK });
+          setModal({
+            open: true,
+            type: ModalTypes.DELETE_TASK,
+            data: { id: task.id },
+          });
         }}
       />
     </div>

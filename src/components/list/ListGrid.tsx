@@ -1,6 +1,4 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useGetBoard } from '../../api/board/useGetBoard';
 import { IBoard } from '../../types/IBoard';
@@ -9,19 +7,7 @@ import List from './List';
 import ListPlaceholder from './ListPlaceholder';
 
 function ListGrid({ board }: { board: IBoard }) {
-  const queryClient = useQueryClient();
   const { data: lists, isLoading } = useGetBoard({ boardId: board.id });
-
-  const mutation = useMutation(
-    () => {
-      return axios.delete(`http://localhost:3000/boards/${board.id}`);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['boards']);
-      },
-    }
-  );
 
   if (isLoading) return <h1>Loading</h1>;
 

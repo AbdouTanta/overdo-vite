@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import TextInput from '../../inputs/TextInput';
 import { useModal } from '../../../contexts/modal-context';
 import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
-import { useBoard } from '../../../contexts/board-context';
+import { usePatchList } from '../../../api/list/usePatchList';
 
 type Inputs = {
   name: string;
@@ -14,39 +13,15 @@ type Inputs = {
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 function EditListModal() {
-  const { setModal } = useModal();
-  const { selectedBoard } = useBoard();
+  const { modal, setModal } = useModal();
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    (data: Inputs) => {
-      return axios.post(
-        `http://localhost:3000/boards/${selectedBoard.id}/lists`,
-        data
-      );
+  const { mutate: editList } = usePatchList({
+    onSuccess: () => {
+      queryClient.invalidateQueries(['boards']);
     },
-    {
-      onMutate: async (newList) => {
-        await queryClient.cancelQueries([selectedBoard.id]);
-        const snapshotOfPreviousLists = queryClient.getQueryData([
-          selectedBoard.id,
-        ]);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData([selectedBoard.id], (oldLists: any) => [
-          ...oldLists,
-          newList,
-        ]);
-        return { snapshotOfPreviousLists };
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries([selectedBoard.id]);
-      },
-      onError: (error, newBoard, snapshotOfPreviousLists) => {
-        queryClient.setQueryData([selectedBoard.id], snapshotOfPreviousLists);
-      },
-    }
-  );
+  });
 
   const {
     register,
@@ -54,7 +29,10 @@ function EditListModal() {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    mutation.mutate(data);
+    if (modal?.data?.id) {
+      console.log(modal, data);
+      editList({ listId: modal.data?.id, payload: { name: data.name } });
+    }
     setModal({ open: false, type: ModalTypes.NULL });
   };
 
