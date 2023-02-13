@@ -19,28 +19,24 @@ function App() {
     },
   });
 
-  if (boards) {
-    return (
-      <div className="h-screen bg-slate-200">
-        {/* Nav: Logo and User */}
-        <Navbar />
-        {isLoading ? (
-          <div className="text-center">Loading...</div>
-        ) : (
-          <div className="mt-12 grid grid-cols-[20em_auto]">
-            {/* Sidebar */}
-            <Sidebar boards={boards} />
-            {/* Board lists */}
-            {boards.length === 0 ? (
-              <div>No boards!</div>
-            ) : (
-              selectedBoard.id !== '' && <ListGrid board={selectedBoard} />
-            )}
-          </div>
-        )}
-      </div>
-    );
+  if (isLoading) {
+    return <div className="text-center">Loading...</div>;
   }
+
+  if (!boards) {
+    return null;
+  }
+
+  return (
+    <div className="mt-12 grid grid-cols-[20em_auto]">
+      <Sidebar boards={boards} />
+      {boards.length === 0 ? (
+        <div>No boards!</div>
+      ) : (
+        selectedBoard.id !== '' && <ListGrid board={selectedBoard} />
+      )}
+    </div>
+  );
 }
 
 export default App;

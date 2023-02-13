@@ -10,7 +10,7 @@ function List({ list }: { list: IList }) {
   const { setModal } = useModal();
 
   return (
-    <div className="flex w-72 flex-shrink-0 flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md">
+    <div className="flex w-72 flex-shrink-0 flex-col gap-4 rounded bg-white p-4 shadow-sm transition hover:shadow-md">
       <div className="flex items-center justify-between">
         <div className="text-md font-semibold">{list.name}</div>
         <BoardMenu
