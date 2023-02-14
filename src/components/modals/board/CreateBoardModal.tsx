@@ -15,6 +15,7 @@ import Button from '../../buttons/Button';
 import ModalTypes from '../../../types/ModalTypes';
 import ColorDropdown from '../../inputs/ColorDropdown';
 import { usePostBoard } from '../../../api/board/usePostBoard';
+import { IBoard } from '../../../types/IBoard';
 
 type Inputs = {
   name: string;
@@ -23,13 +24,8 @@ type Inputs = {
 };
 
 function CreateBoardModal() {
-  const queryClient = useQueryClient();
   const { setModal } = useModal();
-  const { mutate: postBoard } = usePostBoard({
-    onSuccess: () => {
-      queryClient.invalidateQueries(['boards']);
-    },
-  });
+  const { mutate: postBoard } = usePostBoard();
   const colors = ['red', 'green', 'blue', 'orange', 'teal', 'yellow', 'black'];
 
   const {

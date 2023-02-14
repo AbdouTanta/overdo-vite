@@ -15,7 +15,7 @@ function ListGrid({ board }: { board: IBoard }) {
 
   return (
     <motion.div
-      className="scrollbar mr-20 flex items-start gap-8 overflow-x-auto pb-4 pr-4"
+      className="scrollbar mr-20 flex items-start gap-2 overflow-x-auto pb-4 pr-4"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ease: 'easeOut', duration: 0.5 }}

@@ -1,4 +1,8 @@
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { CreateBoardDTO, IBoard } from '../../types/IBoard';
 import client from '../common/client';
@@ -16,9 +20,23 @@ function postBoard({ payload }: PostBoardOptions): Promise<Response> {
 }
 
 export function usePostBoard(
-  config: UseMutationOptions<Response, AxiosError, PostBoardOptions>
+  config?: UseMutationOptions<Response, AxiosError, PostBoardOptions>
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation<IBoard, AxiosError, PostBoardOptions>(postBoard, {
+    onSuccess: (newBoard) => {
+      queryClient.setQueryData<IBoard[]>(
+        ['boards'],
+        (oldBoards: IBoard[] | undefined) => {
+          if (oldBoards) {
+            return [...oldBoards, newBoard];
+          } else {
+            return [newBoard];
+          }
+        }
+      );
+    },
     ...config,
   });
 }

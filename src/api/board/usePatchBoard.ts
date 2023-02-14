@@ -1,4 +1,8 @@
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EditBoardDTO, IBoard } from '../../types/IBoard';
 import client from '../common/client';
@@ -22,7 +26,12 @@ function patchBoard({
 export function usePatchBoard(
   config: UseMutationOptions<Response, AxiosError, PatchBoardOptions>
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation<IBoard, AxiosError, PatchBoardOptions>(patchBoard, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
     ...config,
   });
 }

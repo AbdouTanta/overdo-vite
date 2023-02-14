@@ -41,6 +41,8 @@ function App() {
       </div>
     );
   }
+
+  return null;
 }
 
 export default App;

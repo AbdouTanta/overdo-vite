@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useModal } from '../../contexts/modal-context';
 import { useBoard } from '../../contexts/board-context';
 import { ITask } from '../../types/ITask';
-import BoardMenu from '../buttons/OptionsDropdown';
+import BoardMenu from '../buttons/BoardItemDropdown';
 import ModalTypes from '../../types/ModalTypes';
 
 function Task({ task }: { task: ITask }) {

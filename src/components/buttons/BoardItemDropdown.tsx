@@ -1,27 +1,20 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { Menu } from '@headlessui/react';
-import { MouseEvent } from 'react';
 import MenuButton from './MenuButton';
 
-function OptionsDropdown({
+function BoardItemDropdown({
   editHandler,
   deleteHandler,
 }: {
   editHandler: () => void;
   deleteHandler: () => void;
 }) {
-  const clickHandler = (e: MouseEvent) => {
-    console.log('optionsDropdown');
-    // e.stopPropagation();
-  };
-
   return (
     <Menu as="div" className="relative">
       <Menu.Button
         as="div"
         className="relative flex items-center rounded hover:bg-gray-300"
-        onClick={clickHandler}
       >
         <MenuButton />
       </Menu.Button>
@@ -58,4 +51,4 @@ function OptionsDropdown({
   );
 }
 
-export default OptionsDropdown;
+export default BoardItemDropdown;
