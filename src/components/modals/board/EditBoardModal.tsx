@@ -18,8 +18,6 @@ function EditBoardModal() {
   const queryClient = useQueryClient();
   const { mutate: editBoard } = usePatchBoard({
     onSuccess: (newBoard) => {
-      // queryClient.invalidateQueries({ queryKey: ['boards', modal.data?.id] });
-      // queryClient.invalidateQueries({ queryKey: ['boards'] });
       setSelectedBoard(newBoard);
       queryClient.invalidateQueries();
     },

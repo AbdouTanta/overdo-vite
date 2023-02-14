@@ -16,7 +16,6 @@ type UseGetBoardOptions = {
 };
 
 export function useGetBoard({ config, boardId }: UseGetBoardOptions) {
-  console.log(boardId);
   return useQuery<Response>({
     queryKey: ['boards', boardId],
     queryFn: () => getBoard(boardId),

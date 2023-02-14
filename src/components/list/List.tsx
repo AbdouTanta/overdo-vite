@@ -2,7 +2,7 @@ import { useModal } from '../../contexts/modal-context';
 import { IList } from '../../types/IList';
 import { ITask } from '../../types/ITask';
 import ModalTypes from '../../types/ModalTypes';
-import BoardMenu from '../buttons/OptionsDropdown';
+import BoardMenu from '../buttons/BoardItemDropdown';
 import Task from '../task/Task';
 import TaskPlaceholder from '../task/TaskPlaceholder';
 
