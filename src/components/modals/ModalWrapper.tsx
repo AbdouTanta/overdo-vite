@@ -34,15 +34,13 @@ function ModalWrapper() {
 
   const ModalComponent = modals[modal.type];
 
-  if (modal.open) {
+  if (modal.open && ModalComponent) {
     return (
       <div>
         <div className="fixed left-0 top-0 h-screen w-screen bg-black opacity-40" />
-        {ModalComponent ? (
-          <Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
             <ModalComponent />
           </Suspense>
-        ) : null}
       </div>
     );
   }

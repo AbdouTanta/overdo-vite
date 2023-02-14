@@ -98,12 +98,12 @@ function CreateBoardModal() {
         <div className="mt-auto flex justify-end gap-4">
           <Button
             text="Cancel"
-            isPrimary={false}
+            color='danger'
             onClick={() => {
               setModal({ open: false, type: ModalTypes.NULL });
             }}
           />
-          <Button text="Create" isPrimary onClick={handleSubmit(onSubmit)} />
+          <Button text="Create" color='primary' onClick={handleSubmit(onSubmit)} />
         </div>
       </div>
     </div>
