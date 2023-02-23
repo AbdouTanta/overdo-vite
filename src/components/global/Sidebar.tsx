@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-no-bind */
 import {
   closestCenter,
   DndContext,
@@ -87,6 +88,7 @@ function Sidebar({ boards }: SidebarProps) {
         >
           {sortableBoards.map((board) => (
             <BoardItem
+              key={board.id}
               board={board}
               isSelected={board.id === selectedBoard.id}
               onClick={() => {

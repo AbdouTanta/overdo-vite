@@ -1,9 +1,11 @@
-import { IBoard } from '../../types/IBoard';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from 'clsx';
+import { useSortable } from '@dnd-kit/sortable';
+import { IBoard } from '../../types/IBoard';
 import OptionsDropdown from '../buttons/BoardItemDropdown';
 import ModalTypes from '../../types/ModalTypes';
 import { useModal } from '../../contexts/modal-context';
-import { useSortable } from '@dnd-kit/sortable';
+import VerticalDragHandle from '../buttons/VerticalDragHandle';
 
 interface BoardItemProps {
   board: IBoard;
@@ -11,7 +13,7 @@ interface BoardItemProps {
   onClick: () => void;
 }
 
-const BoardItem = ({ board, isSelected, onClick }: BoardItemProps) => {
+function BoardItem({ board, isSelected, onClick }: BoardItemProps) {
   const { setModal } = useModal();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -26,7 +28,7 @@ const BoardItem = ({ board, isSelected, onClick }: BoardItemProps) => {
     : undefined;
 
   return (
-    <div ref={setNodeRef} {...listeners} {...attributes} style={style}>
+    <div ref={setNodeRef} style={style}>
       <div
         key={board.id}
         className={clsx(
@@ -37,6 +39,7 @@ const BoardItem = ({ board, isSelected, onClick }: BoardItemProps) => {
         )}
         onClick={onClick}
       >
+        <VerticalDragHandle {...listeners} {...attributes} />
         <div
           className={clsx(
             isSelected ? `text-${board.color}-700` : `text-${board.color}-500`
@@ -59,6 +62,6 @@ const BoardItem = ({ board, isSelected, onClick }: BoardItemProps) => {
       </div>
     </div>
   );
-};
+}
 
 export default BoardItem;
