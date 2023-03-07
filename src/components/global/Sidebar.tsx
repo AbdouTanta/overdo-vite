@@ -4,16 +4,15 @@ import {
   closestCenter,
   DndContext,
   DragEndEvent,
-  KeyboardSensor,
   PointerSensor,
   useDroppable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useState } from 'react';
@@ -38,10 +37,7 @@ function Sidebar({ boards }: SidebarProps) {
   const { setModal } = useModal();
   const { mutate: editBoard } = usePatchBoard({});
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
   if (boards !== prevBoards) {
@@ -80,6 +76,7 @@ function Sidebar({ boards }: SidebarProps) {
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
+      modifiers={[restrictToVerticalAxis]}
     >
       <div ref={setNodeRef} className="flex flex-col gap-12 px-20">
         <SortableContext

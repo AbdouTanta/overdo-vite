@@ -14,12 +14,17 @@ interface ButtonProps {
 function Button({ text, color, onClick }: ButtonProps) {
   return (
     <div
-      className={clsx('cursor-pointer rounded-lg p-2 font-medium hover:shadow-md outline outline-2', {
-        'bg-green-100 text-green-600 outline-green-400/50': color === 'primary',
-        'text-gray-600 outline-gray-400/50': color === 'secondary',
-        'bg-orange-100 text-orange-600 outline-orange-400/50': color === 'warning',
-        'bg-red-100 text-red-600 outline-red-400/50': color === 'danger'
-      })}
+      className={clsx(
+        'cursor-pointer rounded-lg p-2 font-medium outline outline-2 hover:shadow-md',
+        {
+          'bg-green-100 text-green-600 outline-green-400/50':
+            color === 'primary',
+          'text-gray-600 outline-gray-400/50': color === 'secondary',
+          'bg-orange-100 text-orange-600 outline-orange-400/50':
+            color === 'warning',
+          'bg-red-100 text-red-600 outline-red-400/50': color === 'danger',
+        }
+      )}
       onClick={onClick}
     >
       {text}

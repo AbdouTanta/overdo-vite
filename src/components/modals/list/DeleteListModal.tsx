@@ -30,12 +30,12 @@ function DeleteListModal() {
         <div className="mt-auto flex justify-end gap-4">
           <Button
             text="Cancel"
-            isPrimary={false}
+            color="secondary"
             onClick={() => {
               setModal({ open: false, type: ModalTypes.NULL });
             }}
           />
-          <Button text="Delete" isDelete onClick={handleSubmit} />
+          <Button text="Delete" color="danger" onClick={handleSubmit} />
         </div>
       </div>
     </div>

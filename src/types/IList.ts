@@ -3,6 +3,7 @@ import { ITask } from './ITask';
 export type IList = {
   id: string;
   name: string;
+  lexorank?: string;
   tasks: ITask[];
 };
 
