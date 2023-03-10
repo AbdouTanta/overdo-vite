@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from 'clsx';
-import { useSortable } from '@dnd-kit/sortable';
 import { IBoard } from '../../types/IBoard';
 import OptionsDropdown from '../buttons/BoardItemDropdown';
 import ModalTypes from '../../types/ModalTypes';
@@ -15,20 +14,9 @@ interface BoardItemProps {
 
 function BoardItem({ board, isSelected, onClick }: BoardItemProps) {
   const { setModal } = useModal();
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: board.id,
-    });
-
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        transition,
-      }
-    : undefined;
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <div>
       <div
         key={board.id}
         className={clsx(
@@ -39,7 +27,7 @@ function BoardItem({ board, isSelected, onClick }: BoardItemProps) {
         )}
         onClick={onClick}
       >
-        <VerticalDragHandle {...listeners} {...attributes} />
+        <VerticalDragHandle />
         <div
           className={clsx(
             isSelected ? `text-${board.color}-700` : `text-${board.color}-500`
