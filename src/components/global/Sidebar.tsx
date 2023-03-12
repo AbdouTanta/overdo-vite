@@ -1,7 +1,20 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-no-bind */
-import { DragEndEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { usePatchBoard } from '../../api/board/usePatchBoard';
 import { useBoard } from '../../contexts/board-context';
@@ -19,9 +32,13 @@ type SidebarProps = { boards: IBoard[] };
 function Sidebar({ boards }: SidebarProps) {
   const [sortableBoards, setSortableBoards] = useState(boards);
   const [prevBoards, setPrevBoards] = useState<IBoard[] | null>(null);
+  const { setNodeRef } = useDroppable({ id: 'sidebar' });
   const { selectedBoard, setSelectedBoard } = useBoard();
   const { setModal } = useModal();
   const { mutate: editBoard } = usePatchBoard({});
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
 
   if (boards !== prevBoards) {
     setSortableBoards(boards);
@@ -55,26 +72,38 @@ function Sidebar({ boards }: SidebarProps) {
   }
 
   return (
-    <div className="flex flex-col gap-12 px-20">
-      {sortableBoards.map((board) => (
-        <BoardItem
-          key={board.id}
-          board={board}
-          isSelected={board.id === selectedBoard.id}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToVerticalAxis]}
+    >
+      <div ref={setNodeRef} className="flex flex-col gap-12 px-20">
+        <SortableContext
+          items={sortableBoards}
+          strategy={verticalListSortingStrategy}
+        >
+          {sortableBoards.map((board) => (
+            <BoardItem
+              key={board.id}
+              board={board}
+              isSelected={board.id === selectedBoard.id}
+              onClick={() => {
+                setSelectedBoard(board);
+              }}
+            />
+          ))}
+        </SortableContext>
+        <div
+          className="cursor-pointer text-lg font-medium text-slate-500 underline underline-offset-4 hover:text-slate-700"
           onClick={() => {
-            setSelectedBoard(board);
+            setModal({ open: true, type: ModalTypes.CREATE_BOARD });
           }}
-        />
-      ))}
-      <div
-        className="cursor-pointer text-lg font-medium text-slate-500 underline underline-offset-4 hover:text-slate-700"
-        onClick={() => {
-          setModal({ open: true, type: ModalTypes.CREATE_BOARD });
-        }}
-      >
-        + New Board
+        >
+          + New Board
+        </div>
       </div>
-    </div>
+    </DndContext>
   );
 }
 

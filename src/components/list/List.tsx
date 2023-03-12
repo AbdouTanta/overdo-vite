@@ -1,3 +1,4 @@
+import { useSortable } from '@dnd-kit/sortable';
 import { useModal } from '../../contexts/modal-context';
 import { IList } from '../../types/IList';
 import { ITask } from '../../types/ITask';
@@ -9,11 +10,25 @@ import TaskPlaceholder from '../task/TaskPlaceholder';
 
 function List({ list }: { list: IList }) {
   const { setModal } = useModal();
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: list.id,
+    });
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        transition,
+      }
+    : undefined;
 
   return (
-    <div className="flex w-72 flex-shrink-0 flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex w-72 flex-shrink-0 flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md"
+    >
       <div className="flex items-center justify-between">
-        <HorizontalDragHandle />
+        <HorizontalDragHandle {...listeners} {...attributes} />
         <div className="text-md font-semibold">{list.name}</div>
         <BoardMenu
           editHandler={() => {
